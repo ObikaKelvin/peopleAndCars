@@ -1,8 +1,8 @@
 import { Card } from 'antd'
-import RemoveContact from '../buttons/RemoveContact'
+import RemoveContact from '../buttons/RemovePerson'
 import { EditOutlined } from '@ant-design/icons'
 import { useState } from 'react'
-import UpdateContact from '../forms/UpdateContact'
+import UpdateContact from '../forms/UpdatePerson'
 
 const getStyles = () => ({
   card: {

@@ -4,7 +4,7 @@ import { GET_PERSONS, REMOVE_PERSON } from '../../queries'
 import { DeleteOutlined } from '@ant-design/icons'
 import filter from 'lodash.filter'
 
-const RemoveContact = ({ id, persons, setPersons }) => {
+const RemovePerson = ({ id, persons, setPersons }) => {
     
   const [removePerson] = useMutation(REMOVE_PERSON)
 
@@ -29,4 +29,4 @@ const RemoveContact = ({ id, persons, setPersons }) => {
   return <DeleteOutlined key='delete' onClick={handleButtonClick} style={{ color: 'red' }} />
 }
 
-export default RemoveContact
+export default RemovePerson

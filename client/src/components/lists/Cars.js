@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { GET_PERSONS } from '../../queries'
 import { List } from 'antd'
-import Contact from '../listItems/Contact'
+import Contact from '../listItems/Person'
 
 const getStyles = () => ({
   list: {

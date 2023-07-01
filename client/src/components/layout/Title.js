@@ -6,10 +6,10 @@ const getStyles = () => ({
   }
 })
 
-const Title = () => {
+const Title = (props) => {
   const styles = getStyles()
 
-  return <h1 style={styles.title}>People and their cars</h1>
+  return <h1 style={styles.title}>{props.title}</h1>
 }
 
 export default Title

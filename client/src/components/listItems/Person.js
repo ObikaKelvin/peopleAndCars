@@ -1,8 +1,8 @@
 import { Card } from 'antd'
-import RemoveContact from '../buttons/RemoveContact'
+import RemovePerson from '../buttons/RemovePerson'
 import { EditOutlined } from '@ant-design/icons'
 import { useState } from 'react'
-import UpdateContact from '../forms/UpdateContact'
+import UpdatePerson from '../forms/UpdatePerson'
 
 const getStyles = () => ({
   card: {
@@ -10,7 +10,7 @@ const getStyles = () => ({
   }
 })
 
-const Contact = props => {
+const Person = props => {
   const { id, firstName, lastName, cars, persons, setPersons } = props
   console.log(cars);
   const styles = getStyles()
@@ -23,7 +23,7 @@ const Contact = props => {
   return (
     <div>
       {editMode ? (
-        <UpdateContact
+        <UpdatePerson
           id={id}
           firstName={firstName}
           lastName={lastName}
@@ -35,7 +35,7 @@ const Contact = props => {
           actions={[
             <EditOutlined key='edit' onClick={handleButtonClick} />,
                     
-            <RemoveContact id={id} firstName={firstName} lastName={lastName} persons={persons} setPersons={setPersons}/>
+            <RemovePerson id={id} firstName={firstName} lastName={lastName} persons={persons} setPersons={setPersons}/>
           ]}
         >
           {firstName} {lastName}
@@ -45,4 +45,4 @@ const Contact = props => {
   )
 }
 
-export default Contact
+export default Person

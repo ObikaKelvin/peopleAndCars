@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { GET_PERSONS } from '../../queries'
 import { List } from 'antd'
-import Contact from '../listItems/Contact'
+import Person from '../listItems/Person'
 import { useEffect } from 'react'
 
 const getStyles = () => ({
@@ -11,7 +11,7 @@ const getStyles = () => ({
   }
 })
 
-const Contacts = (props) => {
+const Persons = (props) => {
   const styles = getStyles()
 
   const { persons, setPersons } = props
@@ -34,7 +34,7 @@ const Contacts = (props) => {
     if(persons) {
         return persons.map(({ id, firstName, lastName, cars }) => (
             <List.Item key={id}>
-                <Contact
+                <Person
                     id={id}
                     firstName={firstName}
                     lastName={lastName}
@@ -62,4 +62,4 @@ const Contacts = (props) => {
   )
 }
 
-export default Contacts
+export default Persons
