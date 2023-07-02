@@ -1,10 +1,12 @@
 import { useMutation } from '@apollo/client'
 import { Button, Form, Input } from 'antd'
 import { useEffect, useState } from 'react'
+import filter from 'lodash.filter'
+
 import { UPDATE_PERSON } from '../../queries'
 
 const UpdatePerson = props => {
-  const { id, firstName, lastName } = props
+  const { id, firstName, lastName, persons, setPersons } = props
   const [form] = Form.useForm()
   const [, forceUpdate] = useState()
 
@@ -17,13 +19,34 @@ const UpdatePerson = props => {
   const onFinish = values => {
     const { firstName, lastName } = values
 
-    updatePerson({
-      variables: {
+    const filteredPersons = filter(persons, p => {
+        return p.id !== id
+    });
+
+    const variables = {
         id,
         firstName,
         lastName
       }
+    
+    filteredPersons.push(variables);
+    
+    filteredPersons.sort(( a, b ) => {
+        if ( a.id < b.id ){
+          return -1;
+        }
+        if ( a.id > b.id ){
+          return 1;
+        }
+        return 0;
     })
+
+    setPersons(filteredPersons)
+
+    updatePerson({
+        variables
+      })
+
     props.onButtonClick()
   }
 

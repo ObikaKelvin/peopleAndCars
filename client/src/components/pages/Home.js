@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Divider } from "antd";
+
 import Title from '../layout/Title'
 import AddPerson from '../forms/AddPerson'
 import AddCar from '../forms/AddCar'
@@ -10,15 +12,38 @@ const Home = () => {
     
     return (
         <div className='App'>
-            <Title title='People and their cars' />
+            <Title title='PEOPLE AND THEIR CARS' />
+
+            <Divider />
             
-            <Title title='Add Person' />
+            <Divider>
+                <Title title='Add Person' />
+            </Divider>
+
             <AddPerson persons={persons} setPersons={setPersons}/>
             
-            <Title title='Add Car' />
-            <AddCar persons={persons} setPersons={setPersons}/>
+            {persons.length !== 0 &&
+                (
+                    <>
+                        <Divider>
+                            <Title title='Add Car' />
+                        </Divider>
+
+                        <AddCar cars={cars} setCars={setCars} persons={persons} />
+                    </>
+                )
+            }
+
+            <Divider>
+                <Title title='Records' />
+            </Divider>
             
-            <Persons persons={persons} setPersons={setPersons} />
+            <Persons 
+                persons={persons} 
+                setPersons={setPersons}
+                cars={cars}
+                setCars={setCars}
+            />
         </div>
     )
 }

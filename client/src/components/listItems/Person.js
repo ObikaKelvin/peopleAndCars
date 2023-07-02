@@ -3,18 +3,19 @@ import RemovePerson from '../buttons/RemovePerson'
 import { EditOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 import UpdatePerson from '../forms/UpdatePerson'
+import Cars from '../lists/Cars'
 
 const getStyles = () => ({
-  card: {
-    width: '500px'
+  personCard: {
+    minWidth: '900px'
   }
 })
 
 const Person = props => {
-  const { id, firstName, lastName, cars, persons, setPersons } = props
-  console.log(cars);
-  const styles = getStyles()
-  const [editMode, setEditMode] = useState(false)
+    const styles = getStyles()
+    const { id, firstName, lastName, cars, setCars, persons, setPersons } = props
+  
+    const [editMode, setEditMode] = useState(false)
 
   const handleButtonClick = () => {
     setEditMode(!editMode)
@@ -28,17 +29,23 @@ const Person = props => {
           firstName={firstName}
           lastName={lastName}
           onButtonClick={handleButtonClick}
+          persons={persons}
+          setPersons={setPersons}
         />
       ) : (
         <Card
-          style={styles.card}
-          actions={[
-            <EditOutlined key='edit' onClick={handleButtonClick} />,
-                    
-            <RemovePerson id={id} firstName={firstName} lastName={lastName} persons={persons} setPersons={setPersons}/>
-          ]}
+            title={`${firstName} ${lastName}`}
+            style={styles.personCard}
+            actions={[
+                <EditOutlined key='edit' onClick={handleButtonClick} />,
+                        
+                <RemovePerson id={id} firstName={firstName} lastName={lastName} persons={persons} setPersons={setPersons}/>
+            ]}
         >
-          {firstName} {lastName}
+
+            <Cars cars={cars} setCars={setCars} currentPersonId={id} persons={persons} />
+            
+            Learn More
         </Card>
       )}
     </div>

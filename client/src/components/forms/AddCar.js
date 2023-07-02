@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react'
 import { Button, Form, Input, Select } from 'antd'
 import { v4 as uuidv4 } from 'uuid'
 import { useMutation } from '@apollo/client'
-import { ADD_PERSON, GET_PERSONS } from '../../queries'
+import { ADD_CAR, GET_CARS } from '../../queries'
 
 const AddCar = (props) => {
   const [id] = useState(uuidv4())
-  const [addCar] = useMutation(ADD_PERSON)
+  const [addCar] = useMutation(ADD_CAR)
 
   const [form] = Form.useForm()
   const [, forceUpdate] = useState()
-  const { persons, setPersons } = props
+  const { cars, setCars, persons } = props
 
   // to disable the submit button at the beginning
   useEffect(() => {
@@ -18,33 +18,24 @@ const AddCar = (props) => {
   }, [])
 
   const onFinish = values => {
-    const { firstName, lastName } = values
+    const { year, make, model, price, personId } = values
+
+    const variables = {id, year, make, model, price, personId }
+    
+    setCars([...cars, variables]);
 
     addCar({
-      variables: {
-        id,
-        firstName,
-        lastName
-      },
+      variables,
       update: (cache, { data: { addCar } }) => {
-        const data = cache.readQuery({ query: GET_PERSONS })
+        const data = cache.readQuery({ query: GET_CARS })
         cache.writeQuery({
-          query: GET_PERSONS,
+          query: GET_CARS,
           data: {
-            ...data,
-            contacts: [...data.contacts, addCar]
+            cars: [...data.cars, addCar]
           }
         })
       }
     })
-  }
-
-  const displayPersons = () => {
-    if(persons) {
-        return persons.map(person => {
-            return(<Select.Option value={`${person.id}`}>{person.firstName} {person.lastName}</Select.Option>)
-        })
-    }
   }
 
   return (
@@ -91,11 +82,13 @@ const AddCar = (props) => {
 
         <Form.Item
             label='Person'
-            name='person'
-            rules={[{ required: true, message: 'Please input a person!' }]}
+            name='personId'
+            rules={[{ required: true, message: 'Please select a person!' }]}
         >
             <Select>
-                {displayPersons()}
+                {persons.map(person => {
+                    return(<Select.Option value={`${person.id}`}>{person.firstName} {person.lastName}</Select.Option>)
+                })}
             </Select>
         </Form.Item>
 

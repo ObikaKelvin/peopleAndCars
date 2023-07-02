@@ -114,6 +114,7 @@ const typeDefs = `
   type Query {
     person(id: String!): Person
     persons: [Person]
+    personsWithCars: [Person]
     car(id: String!): Car
     cars: [Car]
   }
@@ -131,7 +132,8 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    persons: () => {
+    persons: () => people,
+    personsWithCars: () => {
         const query = people.map(person => {
             person.cars = [];
             cars.forEach(car => {
@@ -201,32 +203,40 @@ const resolvers = {
     addCar: (root, args) => {
         const newCar = {
           id: args.id,
-          firstName: args.firstName,
-          lastName: args.lastName
+          year: args.year,
+          make: args.make,
+          model: args.model,
+          price: args.price,
+          personId: args.personId
         }
   
-        people.push(newCar)
+        cars.push(newCar)
   
         return newCar
       },
+
       updateCar: (root, args) => {
         const car = find(cars, { id: args.id })
         if (!car) {
           throw new Error(`Couldn't find car with id ${args.id}`)
         }
   
-        car.firstName = args.firstName
-        car.lastName = args.lastName
+        car.year = args.year
+        car.make = args.make
+        car.model = args.model
+        car.price = args.price
+        car.personId = args.personId
   
         return car
       },
+
       removeCar: (root, args) => {
-        const removedCar = find(people, { id: args.id })
+        const removedCar = find(cars, { id: args.id })
         if (!removedCar) {
           throw new Error(`Couldn't find car with id ${args.id}`)
         }
   
-        remove(people, c => {
+        remove(cars, c => {
           return c.id === removedCar.id
         })
   

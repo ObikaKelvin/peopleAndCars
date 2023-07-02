@@ -14,7 +14,7 @@ const getStyles = () => ({
 const Persons = (props) => {
   const styles = getStyles()
 
-  const { persons, setPersons } = props
+  const { persons, setPersons, cars, setCars } = props
   
   const { loading, error, data } = useQuery(GET_PERSONS)
 
@@ -24,40 +24,26 @@ const Persons = (props) => {
     }
   }, [data])
 
-  useEffect(() => {
-    if(persons) {
-        setPersons(persons)
-    }
-  }, [persons])
 
-  const displayPersons = () => {
-    if(persons) {
-        return persons.map(({ id, firstName, lastName, cars }) => (
+  if (loading) return 'Loading...'
+  if (error) return `Error! ${error.message}`
+
+
+  return (
+    <List grid={{ gutter: 20, column: 1 }} style={styles.list}>
+        {persons.map(({ id, firstName, lastName }) => (
             <List.Item key={id}>
                 <Person
                     id={id}
                     firstName={firstName}
                     lastName={lastName}
                     cars={cars}
+                    setCars={setCars}
                     persons={persons}
                     setPersons={setPersons}
                 />
             </List.Item>
-        ))
-    }
-    else {
-        return (<></>)
-    }
-  }
-
-  if (loading) return 'Loading...'
-  if (error) return `Error! ${error.message}`
-
-  console.log('data', data)
-
-  return (
-    <List grid={{ gutter: 20, column: 1 }} style={styles.list}>
-        {displayPersons()}
+        ))}
     </List>
   )
 }
