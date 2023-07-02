@@ -22,7 +22,7 @@ const Cars = (props) => {
     if(data) {
         setCars(data.cars)
     }
-  }, [data])
+  }, [data?.cars?.length])
 
   if (loading) return 'Loading...'
   if (error) return `Error! ${error.message}`
@@ -44,6 +44,7 @@ const Cars = (props) => {
                         cars={cars}
                         setCars={setCars}
                         persons={persons}
+                        personId={personId}
                     />
                 </List.Item>
             )

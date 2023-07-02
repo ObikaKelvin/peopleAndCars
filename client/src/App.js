@@ -1,9 +1,9 @@
-import { useState } from 'react'
 import 'antd/dist/reset.css'
 
 import { ApolloClient, ApolloProvider, InMemoryCache, useQuery } from '@apollo/client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Home from './components/pages/Home'
+import People from './components/pages/People'
 
 import './App.css'
 
@@ -12,13 +12,13 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 })
 const App = () => {
-    const [persons, setPersons] = useState([]);
 
     return (
         <ApolloProvider client={client}>
             <Router>
                 <Routes>
                     <Route path="/" element={<Home  />} />
+                    <Route path="/people/:id" element={<People  />} />
                 </Routes>
             </Router>
         </ApolloProvider>

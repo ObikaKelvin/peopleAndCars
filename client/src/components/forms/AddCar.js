@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Button, Form, Input, Select } from 'antd'
+import { Button, Form, Input, InputNumber, Select } from 'antd'
 import { v4 as uuidv4 } from 'uuid'
 import { useMutation } from '@apollo/client'
 import { ADD_CAR, GET_CARS } from '../../queries'
+import formatPrice from '../../utils/formatPrice'
 
 const AddCar = (props) => {
-  const [id] = useState(uuidv4())
   const [addCar] = useMutation(ADD_CAR)
 
   const [form] = Form.useForm()
@@ -19,6 +19,7 @@ const AddCar = (props) => {
 
   const onFinish = values => {
     const { year, make, model, price, personId } = values
+    const id = uuidv4();
 
     const variables = {id, year, make, model, price, personId }
     
@@ -36,6 +37,8 @@ const AddCar = (props) => {
         })
       }
     })
+
+    form.resetFields();
   }
 
   return (
@@ -53,7 +56,7 @@ const AddCar = (props) => {
         name='year'
         rules={[{ required: true, message: 'Please input a year!' }]}
       >
-        <Input placeholder='Year' />
+        <InputNumber placeholder='Year' />
       </Form.Item>
 
       <Form.Item
@@ -77,7 +80,10 @@ const AddCar = (props) => {
         name='price'
         rules={[{ required: true, message: 'Please input a price!' }]}
       >
-        <Input placeholder='price' />
+        <InputNumber placeholder='price' 
+            formatter={formatPrice}
+            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+        />
       </Form.Item>
 
         <Form.Item
@@ -85,9 +91,9 @@ const AddCar = (props) => {
             name='personId'
             rules={[{ required: true, message: 'Please select a person!' }]}
         >
-            <Select>
+            <Select placeholder="Select a person">
                 {persons.map(person => {
-                    return(<Select.Option value={`${person.id}`}>{person.firstName} {person.lastName}</Select.Option>)
+                    return(<Select.Option key={person.id} value={`${person.id}`}>{person.firstName} {person.lastName}</Select.Option>)
                 })}
             </Select>
         </Form.Item>

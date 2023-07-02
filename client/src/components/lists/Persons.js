@@ -22,7 +22,7 @@ const Persons = (props) => {
     if(data) {
         setPersons(data.persons)
     }
-  }, [data])
+  }, [data?.persons?.length])
 
 
   if (loading) return 'Loading...'

@@ -3,6 +3,8 @@ import RemoveCar from '../buttons/RemoveCar'
 import { EditOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 import UpdateCar from '../forms/UpdateCar'
+import formatPrice from '../../utils/formatPrice'
+
 
 const getStyles = () => ({
     carCard: {
@@ -31,11 +33,13 @@ const Car = props => {
           price={price}
           personId={personId}
           onButtonClick={handleButtonClick}
+          cars={cars}
+          setCars={setCars}
           persons={persons}
         />
       ) : (
         <Card
-            title={`${year} ${make} ${model} -> ${price}`}
+            title={`${year} ${make} ${model} -> ${formatPrice(price)}`}
             type="inner"
             style={styles.carCard}
             actions={[

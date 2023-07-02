@@ -35,6 +35,8 @@ const AddPerson = (props) => {
         })
       }
     })
+
+    form.resetFields();
   }
 
   return (

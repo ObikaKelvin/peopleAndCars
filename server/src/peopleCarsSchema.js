@@ -104,17 +104,17 @@ const typeDefs = `
 
   type Car {
     id: String!
-    year: String!
+    year: Int!
     make: String!
     model: String!
-    price: String!
+    price: Float!
     personId: String!
   }
 
   type Query {
     person(id: String!): Person
     persons: [Person]
-    personsWithCars: [Person]
+    personWithCars(id: String!): Person
     car(id: String!): Car
     cars: [Car]
   }
@@ -124,8 +124,8 @@ const typeDefs = `
     updatePerson(id: String!, firstName: String!, lastName: String!): Person
     removePerson(id: String!): Person
 
-    addCar(id: String!, year: String!, make: String!, model: String!, price: String!, personId: String!): Car
-    updateCar(id: String!, year: String!, make: String!, model: String!, price: String!, personId: String!): Car
+    addCar(id: String!, year: Int!, make: String!, model: String!, price: Float!, personId: String!): Car
+    updateCar(id: String!, year: Int!, make: String!, model: String!, price: Float!, personId: String!): Car
     removeCar(id: String!): Car
   }
 `
@@ -133,34 +133,18 @@ const typeDefs = `
 const resolvers = {
   Query: {
     persons: () => people,
-    personsWithCars: () => {
-        const query = people.map(person => {
-            person.cars = [];
-            cars.forEach(car => {
-                if(car.personId === person.id) {
-                    person.cars.push(car);
-                }
-            })
-            return person
-        });
-        console.log(query)
-        return [...query];
-    },
-    person: (parent, args) => {
-        const person = find(people, { id: args.id });
-        person.cars = [];
+    personWithCars: (parent, args) => {
+        const person = find(people, { id: args.id })
+        person.cars=[]
         cars.forEach(car => {
             if(car.personId === person.id) {
                 person.cars.push(car);
             }
         })
-        return person
+        return person;
     },
 
     cars: () => cars,
-    car: (parent, args) => {
-      return find(cars, { id: args.id })
-    },
   },
   Mutation: {
     addPerson: (root, args) => {

@@ -1,7 +1,9 @@
-import { Card } from 'antd'
-import RemovePerson from '../buttons/RemovePerson'
-import { EditOutlined } from '@ant-design/icons'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Card } from 'antd'
+import { EditOutlined } from '@ant-design/icons'
+
+import RemovePerson from '../buttons/RemovePerson'
 import UpdatePerson from '../forms/UpdatePerson'
 import Cars from '../lists/Cars'
 
@@ -13,13 +15,21 @@ const getStyles = () => ({
 
 const Person = props => {
     const styles = getStyles()
-    const { id, firstName, lastName, cars, setCars, persons, setPersons } = props
+    const { id, firstName, lastName, cars, setCars, persons, setPersons, showLink, showActions } = props
   
     const [editMode, setEditMode] = useState(false)
 
   const handleButtonClick = () => {
     setEditMode(!editMode)
   }
+  const actions = []
+
+    if(showActions) {
+        actions.push(<EditOutlined key='edit' onClick={handleButtonClick} />)
+        
+        actions.push(<RemovePerson id={id} firstName={firstName} lastName={lastName} persons={persons} setPersons={setPersons}/>)
+        
+    }
 
   return (
     <div>
@@ -36,20 +46,21 @@ const Person = props => {
         <Card
             title={`${firstName} ${lastName}`}
             style={styles.personCard}
-            actions={[
-                <EditOutlined key='edit' onClick={handleButtonClick} />,
-                        
-                <RemovePerson id={id} firstName={firstName} lastName={lastName} persons={persons} setPersons={setPersons}/>
-            ]}
+            actions={actions}
         >
 
             <Cars cars={cars} setCars={setCars} currentPersonId={id} persons={persons} />
             
-            Learn More
+            {showLink && <Link to={`/people/${id}`}>Learn More</Link>}
         </Card>
       )}
     </div>
   )
+}
+
+Person.defaultProps = {
+    showLink: true,
+    showActions: true
 }
 
 export default Person

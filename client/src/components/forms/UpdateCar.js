@@ -1,21 +1,41 @@
 import { useMutation } from '@apollo/client'
-import { Button, Form, Input, Select } from 'antd'
+import { Button, Form, Input, InputNumber, Select } from 'antd'
 import { useEffect, useState } from 'react'
+import filter from 'lodash.filter'
+
 import { UPDATE_CAR } from '../../queries'
+import formatPrice from '../../utils/formatPrice'
 
 const UpdateCar = props => {
-  const { id, year, make, model, price, personId, persons } = props
+  const { id, year, make, model, price, personId, persons, cars, setCars } = props
   const [form] = Form.useForm()
   const [, forceUpdate] = useState()
 
   const [updateCar] = useMutation(UPDATE_CAR)
-
   useEffect(() => {
     forceUpdate({})
   }, [])
 
   const onFinish = values => {
-    const { year, make, model, price, personId } = values
+    const { year, make, model, price, personId } = values;
+
+    const filteredCars = filter(cars, c => {
+        return c.id !== id
+    });
+
+    const variables = {
+        id,
+        year,
+        make,
+        model,
+        price,
+        personId
+      }
+    
+    filteredCars.push(variables);
+
+    setCars(filteredCars)
+    console.log(filteredCars)
 
     updateCar({
       variables: {
@@ -49,28 +69,45 @@ const UpdateCar = props => {
         name='year'
         rules={[{ required: true, message: 'Please input car year!' }]}
       >
-        <Input placeholder='i.e. 1995' />
+        <InputNumber placeholder='year' />
       </Form.Item>
       <Form.Item
         name='make'
         rules={[{ required: true, message: 'Please input car make!' }]}
       >
-        <Input placeholder='i.e. Toyota' />
+        <Input placeholder='make' />
       </Form.Item>
 
       <Form.Item
         name='model'
         rules={[{ required: true, message: 'Please input car model!' }]}
       >
-        <Input placeholder='i.e. Toyota' />
+        <Input placeholder='model' />
       </Form.Item>
 
       <Form.Item
         name='price'
         rules={[{ required: true, message: 'Please input car price!' }]}
       >
-        <Input placeholder='i.e. Toyota' />
+        <InputNumber placeholder='price' 
+            formatter={formatPrice}
+            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+        />
       </Form.Item>
+
+      <Form.Item
+            label='Person'
+            name='personId'
+            rules={[{ required: true, message: 'Please select a person!' }]}
+        >
+            <Select
+                placeholder="Select a person"
+            >
+                {persons.map(person => {
+                    return(<Select.Option key={person.id} value={`${person.id}`}>{person.firstName} {person.lastName}</Select.Option>)
+                })}
+            </Select>
+        </Form.Item>
 
       
 
